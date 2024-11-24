@@ -39,7 +39,7 @@ def addPerson():
         dob = input("Date of Birth (YYYY-MM-DD): ")
 
         query = f"""
-        INSERT INTO Person (Nationality, NationalID, Password, Name_First, Name_Middle, Name_Last, DateOfBirth)
+        INSERT INTO Person (Nationality, NationalID, Password, FirstName, MiddleName,LastName, DateOfBirth)
         VALUES ('{nationality}', '{nationalID}', '{password}', '{first}', '{middle}', '{last}', '{dob}')
         """
         cur.execute(query)

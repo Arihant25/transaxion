@@ -1,8 +1,8 @@
-CREATE DATABASE BankingSystem;
+CREATE DATABASE IF NOT EXISTS BankingSystem;
 USE BankingSystem;
 
 -- Person table
-CREATE TABLE Person (
+ CREATE TABLE IF NOT EXISTS Person (
     Nationality VARCHAR(100),
     NationalID VARCHAR(100),
     Password VARCHAR(100),
@@ -16,7 +16,7 @@ CREATE TABLE Person (
 );
 
 -- Registered Bank table
-CREATE TABLE RegisteredBank (
+CREATE TABLE IF NOT EXISTS RegisteredBank (
     BankID INT PRIMARY KEY,
     BankName VARCHAR(100),
     City VARCHAR(100),
@@ -30,7 +30,7 @@ CREATE TABLE RegisteredBank (
 );
 
 -- Bank Branch table (Weak Entity)
-CREATE TABLE BankBranch (
+CREATE TABLE IF NOT EXISTS BankBranch (
     BranchCode INT,
     BankID INT,
     City VARCHAR(100),
@@ -46,7 +46,7 @@ CREATE TABLE BankBranch (
 );
 
 -- Bank Account table
-CREATE TABLE BankAccount (
+CREATE TABLE IF NOT EXISTS BankAccount (
     AccountNumber INT PRIMARY KEY,
     User_Nationality VARCHAR(100),
     User_NationalID VARCHAR(100),
@@ -65,7 +65,7 @@ CREATE TABLE BankAccount (
 );
 
 -- Current Account (Subclass of BankAccount)
-CREATE TABLE CurrentAccount (
+CREATE TABLE IF NOT EXISTS  CurrentAccount (
     AccountNumber INT PRIMARY KEY,
     MinBalance DECIMAL(15, 2),
     MonthlyTransactionLimit INT,
@@ -73,7 +73,7 @@ CREATE TABLE CurrentAccount (
 );
 
 -- Saving Account (Subclass of BankAccount)
-CREATE TABLE SavingAccount (
+CREATE TABLE IF NOT EXISTS SavingAccount (
     AccountNumber INT PRIMARY KEY,
     MinBalance DECIMAL(15, 2),
     InterestRate DECIMAL(5, 2),
@@ -82,7 +82,7 @@ CREATE TABLE SavingAccount (
 );
 
 -- Salary Account (Subclass of BankAccount)
-CREATE TABLE SalaryAccount (
+CREATE TABLE IF NOT EXISTS SalaryAccount (
     AccountNumber INT PRIMARY KEY,
     OrganisationID VARCHAR(100),
     EmployeeID VARCHAR(100),
@@ -90,7 +90,7 @@ CREATE TABLE SalaryAccount (
 );
 
 -- Demat Account (Subclass of BankAccount)
-CREATE TABLE DematAccount (
+CREATE TABLE IF NOT EXISTS DematAccount (
     AccountNumber INT PRIMARY KEY,
     DPID VARCHAR(100),
     TradingAccountLink VARCHAR(100),
@@ -99,7 +99,7 @@ CREATE TABLE DematAccount (
 );
 
 -- Fixed Deposit Account (Subclass of BankAccount)
-CREATE TABLE FixedDepositAccount (
+CREATE TABLE IF NOT EXISTS FixedDepositAccount (
     AccountNumber INT PRIMARY KEY,
     LockinPeriod DATE,
     MaturityDate DATE,
@@ -108,7 +108,7 @@ CREATE TABLE FixedDepositAccount (
 );
 
 -- Transaction table (Weak Entity)
-CREATE TABLE Transaction (
+CREATE TABLE IF NOT EXISTS Transaction (
     TransactionID INT,
     SenderAccNum INT,
     ReceiverAccNum INT,
@@ -121,7 +121,7 @@ CREATE TABLE Transaction (
 );
 
 -- Budgets table (Weak Entity)
-CREATE TABLE Budgets (
+CREATE TABLE IF NOT EXISTS Budgets (
     Category VARCHAR(100),
     User_Nationality VARCHAR(100),
     User_NationalID VARCHAR(100),
@@ -135,7 +135,7 @@ CREATE TABLE Budgets (
 );
 
 -- Savings Goals table (Weak Entity)
-CREATE TABLE SavingsGoals (
+CREATE TABLE IF NOT EXISTS SavingsGoals (
     GoalName VARCHAR(100),
     User_Nationality VARCHAR(100),
     User_NationalID VARCHAR(100),
