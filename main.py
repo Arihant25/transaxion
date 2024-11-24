@@ -2,6 +2,21 @@ import subprocess as sp
 import pymysql
 import pymysql.cursors
 
+def initialize_database_via_connection(con):
+    try:
+        with open("creator.sql", "r") as file:
+            sql_commands = file.read()
+            with con.cursor() as cur:
+                for command in sql_commands.split(";"):
+                    if command.strip():  # Skip empty commands
+                        cur.execute(command)
+            con.commit()
+        print("Database initialized successfully.")
+    except Exception as e:
+        print("Error initializing database:", e)
+        con.rollback()
+
+
 def viewAllPersons():
     try:
         query = "SELECT * FROM Person"
@@ -68,16 +83,16 @@ def deletePerson():
         con.rollback()
         print("Failed to delete person:", e)
 
-def dispatch(ch):
-    if ch == 1:
+def chooser(choice):
+    if choice == 1:
         viewAllPersons()
-    elif ch == 2:
+    elif choice == 2:
         addPerson()
-    elif ch == 3:
+    elif choice == 3:
         viewAllBankAccounts()
-    elif ch == 4:
+    elif choice == 4:
         updateBankBalance()
-    elif ch == 5:
+    elif choice == 5:
         deletePerson()
     else:
         print("Invalid option.")
@@ -93,7 +108,7 @@ while True:
             port=3306,
             user=username,
             password=password,
-            db='BANK_SYSTEM',  # Replace with your database name
+            db='BANK_SYSTEM',
             cursorclass=pymysql.cursors.DictCursor
         )
 
@@ -101,6 +116,9 @@ while True:
             print("Connected to the database.")
         else:
             print("Failed to connect to the database.")
+
+        with con.cursor() as cur:
+            initialize_database_via_connection(con)
 
         tmp = input("Press any key to continue>")
 
@@ -114,13 +132,13 @@ while True:
                 print("5. Delete a Person")
                 print("6. Logout")
 
-                ch = int(input("Enter your choice: "))
+                choice = int(input("Enter your choice: "))
                 tmp = sp.call('clear', shell=True)
 
-                if ch == 6:
+                if choice == 6:
                     exit()
                 else:
-                    dispatch(ch)
+                    chooser(choice)
                     tmp = input("Press any key to continue>")
 
     except Exception as e:
