@@ -1,45 +1,71 @@
-# Transaxion
+# Transaxion: Finance Management System
 
-**Course Project for Data and Applications 2024**  
-*International Institute of Information Technology, Hyderabad (IIIT-H)*  
-
----
-
-## 📖 Overview
-
-**Transaxion** is a database-backed application designed to manage transactional operations in a financial ecosystem. It leverages a relational database to store, retrieve, and manipulate structured data efficiently. The project implements real-world banking scenarios, showcasing various querying and update functionalities using Python and MySQL.
+**Enterprise-Grade Financial Transaction Management System**  
+*Built with Python, MySQL, and Industry-Standard Security Practices*
 
 ---
 
-## 🎯 Objectives
+## 🎯 Available Operations
 
-1. **Database Design**: Develop a relational schema for a financial system with entities like `Person`, `BankAccount`, `Transactions`, etc.  
-2. **Data Management**: Perform CRUD operations using `pymysql` to interact with the MySQL database.  
-3. **Functional Queries**: Implement at least 5 data retrieval queries.  
-4. **Updates**: Perform at least 3 updates to simulate real-world modifications in the database.  
-5. **Error Handling**: Ensure domain constraints and referential integrity are maintained during user input and database updates.
+### Account Management
+1. **View Account Details**
+   - Check account balance
+   - View account holder information
+   - See account creation date
+   - Check account type and associated details
 
----
+2. **View All Persons**
+   - List all registered users in the system
+   - View basic profile information
+   - Check nationality and identification details
 
-## 🛠️ Features
+3. **Add New Person**
+   - Register new users in the system
+   - Secure password creation
+   - Store personal information
+   - Set up user profile
 
-- **View All Persons**: Retrieve all records from the `Person` table.  
-- **Add a New Person**: Insert a new record into the `Person` table with data validation.  
-- **View Bank Accounts**: Display details of all bank accounts.  
-- **Update Bank Balance**: Modify the balance for a given account.  
-- **Delete a Person**: Remove a person and their associated records from the database.
+### Transaction Management
+4. **Make Transaction**
+   - Transfer funds between accounts
+   - Secure transaction verification
+   - Real-time balance updates
+   - Transaction confirmation
 
----
+5. **View Transaction History**
+   - See detailed transaction records
+   - Filter by date and time
+   - View incoming and outgoing transfers
+   - Track transaction status
+
+### Financial Planning
+6. **View Savings Goals**
+   - Track savings targets
+   - Monitor progress
+   - View deadline information
+   - Check current savings status
+
+7. **View Budgets**
+   - Monitor spending categories
+   - Track budget limits
+   - View current expenditure
+   - Check budget duration
+
+### Security Features
+- Session timeout after 5 minutes of inactivity
+- Secure password hashing
+- Transaction password verification
+- Audit logging of all operations
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-1. **Python**: Ensure Python 3.x is installed.
-2. **MySQL Server**: Install MySQL and create a database named `BANK_SYSTEM` by running `creator.sql`.
-3. **Python Modules**: Install required dependency:
+1. **Python**: Ensure Python 3 is installed.
+2. **MySQL Server**: Ensure MySQL is installed and running.
+3. **Python Modules**: Install required dependencies:
    ```bash
-   pip install pymysql
+   pip install -r requirements.txt
    ```
 
 ### Running the Application
@@ -48,10 +74,14 @@
    ```bash
    python main.py
    ```
-2. Enter your MySQL username and password to connect.  
+2. Follow the on-screen instructions to navigate the system.
 
 ---
 
-## 📄 License
+## 📝 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+This is a course project for the CS4.301 - Data and Applications Course at IIIT Hyderabad. 
+
+---
