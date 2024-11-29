@@ -2,7 +2,9 @@ import logging
 import os
 import subprocess as sp
 import time
+from decimal import Decimal
 from getpass import getpass
+
 import pymysql
 import pymysql.cursors
 
@@ -218,7 +220,7 @@ class BankingSystem:
             result = self.db.cursor.fetchone()
 
             print(f"\nTotal transactions between {start_date} and {end_date}:")
-            print(f"${result['TotalAmount']:,.2f}" if result['TotalAmount'] else "$0.00")
+            print(f"${result['TotalAmount']                  :,.2f}" if result['TotalAmount'] else "$0.00")
 
         except Exception as e:
             logging.error(f"Error calculating user transactions: {str(e)}")
@@ -966,6 +968,152 @@ class BankingSystem:
             logging.error(f"Error adding savings goal: {str(e)}")
             print(f"\nError: {str(e)}")
 
+    def make_transaction(self):
+        """Execute a transaction between two bank accounts"""
+        try:
+            print("\nNew Transaction")
+            sender_acc = int(input("Enter Sender's Account Number: ").strip())
+            receiver_acc = int(
+                input("Enter Receiver's Account Number: ").strip())
+            amount = Decimal(float(input("Enter Transaction Amount: ").strip()))
+
+            if amount <= 0:
+                print("\nError: Amount must be positive")
+                return
+
+            self.db.cursor.execute("START TRANSACTION")
+
+            # Verify sender's account and check balance
+            self.db.cursor.execute("""
+                SELECT ba.AccountNumber, ba.Balance, ba.UserNationality, ba.UserNationalID,
+                    p2.First, p2.Last
+                FROM BankAccount ba
+                JOIN Person2 p2 ON ba.UserNationality = p2.Nationality 
+                    AND ba.UserNationalID = p2.NationalID
+                WHERE ba.AccountNumber = %s
+            """, (sender_acc,))
+            sender = self.db.cursor.fetchone()
+
+            if not sender:
+                raise ValueError("Sender account not found")
+
+            if sender['Balance'] < amount:
+                raise ValueError("Insufficient funds")
+
+            # Verify receiver's account
+            self.db.cursor.execute("""
+                SELECT ba.AccountNumber, ba.UserNationality, ba.UserNationalID,
+                    p2.First, p2.Last
+                FROM BankAccount ba
+                JOIN Person2 p2 ON ba.UserNationality = p2.Nationality 
+                    AND ba.UserNationalID = p2.NationalID
+                WHERE ba.AccountNumber = %s
+            """, (receiver_acc,))
+            receiver = self.db.cursor.fetchone()
+
+            if not receiver:
+                raise ValueError("Receiver account not found")
+
+            # Check account type restrictions
+            # For Savings Account
+            self.db.cursor.execute("""
+                SELECT MonthlyWithdrawalLimit 
+                FROM SavingAccount 
+                WHERE AccountNumber = %s
+            """, (sender_acc,))
+            saving_acc = self.db.cursor.fetchone()
+
+            if saving_acc:
+                # Check monthly withdrawal limit
+                self.db.cursor.execute("""
+                    SELECT COUNT(*) as transaction_count
+                    FROM Transaction1 t1
+                    JOIN Transaction2 t2 ON t1.TransactionID = t2.TransactionID
+                    WHERE t1.SenderAccNum = %s
+                    AND MONTH(t2.TransactionDate) = MONTH(CURRENT_DATE())
+                    AND YEAR(t2.TransactionDate) = YEAR(CURRENT_DATE())
+                """, (sender_acc,))
+                monthly_transactions = self.db.cursor.fetchone()
+
+                if monthly_transactions['transaction_count'] >= saving_acc['MonthlyWithdrawalLimit']:
+                    raise ValueError(
+                        "Monthly withdrawal limit exceeded for savings account")
+
+            # For Current Account
+            self.db.cursor.execute("""
+                SELECT MinBalance, MonthlyTransactionLimit 
+                FROM CurrentAccount 
+                WHERE AccountNumber = %s
+            """, (sender_acc,))
+            current_acc = self.db.cursor.fetchone()
+
+            if current_acc:
+                if (sender['Balance'] - amount) < current_acc['MinBalance']:
+                    raise ValueError(
+                        "Transaction would breach minimum balance requirement")
+
+                # Check monthly transaction limit
+                self.db.cursor.execute("""
+                    SELECT COUNT(*) as transaction_count
+                    FROM Transaction1 t1
+                    JOIN Transaction2 t2 ON t1.TransactionID = t2.TransactionID
+                    WHERE t1.SenderAccNum = %s
+                    AND MONTH(t2.TransactionDate) = MONTH(CURRENT_DATE())
+                    AND YEAR(t2.TransactionDate) = YEAR(CURRENT_DATE())
+                """, (sender_acc,))
+                monthly_transactions = self.db.cursor.fetchone()
+
+                if monthly_transactions['transaction_count'] >= current_acc['MonthlyTransactionLimit']:
+                    raise ValueError(
+                        "Monthly transaction limit exceeded for current account")
+
+            # Generate new transaction ID
+            self.db.cursor.execute(
+                "SELECT MAX(TransactionID) as max_id FROM Transaction1")
+            result = self.db.cursor.fetchone()
+            transaction_id = (result['max_id'] or 0) + 1
+
+            # Update balances
+            self.db.cursor.execute("""
+                UPDATE BankAccount
+                SET Balance = Balance - %s
+                WHERE AccountNumber = %s
+            """, (amount, sender_acc))
+
+            self.db.cursor.execute("""
+                UPDATE BankAccount 
+                SET Balance = Balance + %s 
+                WHERE AccountNumber = %s
+            """, (amount, receiver_acc))
+
+            # Record transaction
+            self.db.cursor.execute("""
+                INSERT INTO Transaction1 (TransactionID, SenderAccNum, ReceiverAccNum)
+                VALUES (%s, %s, %s)
+            """, (transaction_id, sender_acc, receiver_acc))
+
+            self.db.cursor.execute("""
+                INSERT INTO Transaction2 (TransactionID, TransactionDate, TransactionTime, Amount)
+                VALUES (%s, CURDATE(), CURTIME(), %s)
+            """, (transaction_id, amount))
+
+            self.db.connection.commit()
+            print("\nTransaction completed successfully!")
+            print(f"Transaction ID: {transaction_id}")
+            print(f"From: {sender['First']} {
+                sender['Last']} (Account: {sender_acc})")
+            print(f"To: {receiver['First']} {
+                receiver['Last']} (Account: {receiver_acc})")
+            print(f"Amount: ${amount:,.2f}")
+
+            logging.info(f"Transaction completed: ID {transaction_id}, From {
+                sender_acc} to {receiver_acc}, Amount ${amount:,.2f}")
+
+        except Exception as e:
+            self.db.connection.rollback()
+            logging.error(f"Transaction error: {str(e)}")
+            print(f"\nError: {str(e)}")
+
 
 def main():
     banking_system = BankingSystem()
@@ -1029,11 +1177,14 @@ def main():
                         print("19. Update Budget Limit")
                         print("20. Remove Expired Goals")
 
-                        print("\n21. Logout")
+                        print("\nTransaction Operations:")
+                        print("21. Make Transaction")
 
-                        choice = input("\nEnter your choice (1-21): ").strip()
+                        print("\n22. Logout")
 
-                        if choice == '21':
+                        choice = input("\nEnter your choice (1-22): ").strip()
+
+                        if choice == '22':
                             banking_system.db.disconnect()
                             print("\nLogged out successfully!")
                             break
@@ -1059,7 +1210,8 @@ def main():
                             '17': banking_system.analyze_expenditure_patterns,
                             '18': banking_system.analyze_transaction_patterns,
                             '19': banking_system.update_budget_limit,
-                            '20': banking_system.remove_expired_goals
+                            '20': banking_system.remove_expired_goals,
+                            '21': banking_system.make_transaction
                         }
 
                         if choice in operations:
