@@ -1,13 +1,10 @@
+import logging
+import os
 import subprocess as sp
+import time
+from getpass import getpass
 import pymysql
 import pymysql.cursors
-import hashlib
-import logging
-from getpass import getpass
-from datetime import datetime
-from typing import Optional, Dict, Any
-import os
-import time
 
 # Configure logging
 logging.basicConfig(
