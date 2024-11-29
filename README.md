@@ -1,87 +1,289 @@
-# Transaxion: Finance Management System
+# Advanced Banking System
 
-**Enterprise-Grade Financial Transaction Management System**  
-*Built with Python, MySQL, and Industry-Standard Security Practices*
+## Database Management System Project
 
----
+### Overview
 
-## 🎯 Available Operations
+This is a comprehensive banking system that manages customer accounts, transactions, budgets, and savings goals. The system provides a user-friendly CLI interface to interact with the banking database.
 
-### Account Management
-1. **View Account Details**
-   - Check account balance
-   - View account holder information
-   - See account creation date
-   - Check account type and associated details
+### Features
 
-2. **View All Persons**
-   - List all registered users in the system
-   - View basic profile information
-   - Check nationality and identification details
+#### Data Entry Operations
 
-3. **Add New Person**
-   - Register new users in the system
-   - Secure password creation
-   - Store personal information
-   - Set up user profile
+1. **Add New Location** (Command 1)
 
-### Transaction Management
-4. **Make Transaction**
-   - Transfer funds between accounts
-   - Secure transaction verification
-   - Real-time balance updates
-   - Transaction confirmation
+   - Adds new locations to the system
+   - Required fields: Country, Pincode, State, City
 
-5. **View Transaction History**
-   - See detailed transaction records
-   - Filter by date and time
-   - View incoming and outgoing transfers
-   - Track transaction status
+2. **Add New Bank** (Command 2)
 
-### Financial Planning
-6. **View Savings Goals**
-   - Track savings targets
-   - Monitor progress
-   - View deadline information
-   - Check current savings status
+   - Registers new banks in the system
+   - Captures bank details and global head information
+   - Required fields: Bank Name, Global Head details, Location information
 
-7. **View Budgets**
-   - Monitor spending categories
-   - Track budget limits
-   - View current expenditure
-   - Check budget duration
+3. **Add New Branch** (Command 3)
+
+   - Creates new bank branches
+   - Links branches to existing banks
+   - Required fields: Bank ID, Branch Manager details, Location information
+
+4. **Add New Person** (Command 4)
+
+   - Registers new customers in the system
+   - Handles personal details, contact information, and financial data
+   - Optional custodian assignment for minors
+   - Required fields: Personal details, Income information, Contact details
+
+5. **Add New Bank Account** (Command 5)
+
+   - Creates different types of bank accounts:
+     - Current Account
+     - Savings Account
+     - Salary Account
+     - Demat Account
+     - Fixed Deposit Account
+   - Required fields: Account type specific details, Initial balance
+
+6. **Add New Budget** (Command 6)
+
+   - Creates budget plans for users
+   - Required fields: Category, Limit, Duration
+
+7. **Add New Savings Goal** (Command 7)
+   - Sets up savings targets for users
+   - Required fields: Goal details, Target amount, Deadline
+
+#### Retrieval Operations
+
+8. **View User Transactions** (Command 8)
+
+   - Displays all transactions for a specific user
+   - Shows transaction history with dates and amounts
+
+9. **View Branch Accounts** (Command 9)
+
+   - Lists all accounts in a specific branch
+   - Shows account holders and balances
+
+10. **View High Income Users** (Command 10)
+
+    - Lists users above specified income threshold
+    - Shows detailed user information
+
+11. **View Bank Branch Statistics** (Command 11)
+
+    - Displays branch count for each bank
+    - Shows distribution of branches
+
+12. **Calculate User Transaction Total** (Command 12)
+
+    - Calculates total transaction amount for a user
+    - Filters by date range
+
+13. **Find Maximum Account Balance** (Command 13)
+
+    - Identifies account with highest balance
+    - Shows account holder details
+
+14. **View Country Expenditure Statistics** (Command 14)
+
+    - Shows average expenditure by country
+    - Includes user count per country
+
+15. **Search Users by Name** (Command 15)
+
+    - Searches users using name patterns
+    - Supports partial name matching
+
+16. **Search Banks/Branches** (Command 16)
+    - Searches banks by name or branch location
+    - Shows detailed bank information
+
+#### Analysis Operations
+
+17. **Analyze Expenditure Patterns** (Command 17)
+
+    - Analyzes user spending patterns
+    - Groups by country or city
+    - Shows percentage of income spent
+
+18. **Analyze Transaction Patterns** (Command 18)
+    - Studies transaction frequencies and amounts
+    - Identifies high-volume users
+
+#### Modification Operations
+
+19. **Update Budget Limit** (Command 19)
+
+    - Modifies existing budget limits
+    - Validates against user income
+
+20. **Remove Expired Goals** (Command 20)
+    - Cleans up unmet savings goals
+    - Maintains data integrity
+
+### Video Demonstration
+
+The video demonstration shows all major functionalities of the system in the following order:
+
+#### Data Entry Operations
+
+1. Adding a New Location (Command 1)
+
+   - Demonstrating location addition
+   - Verifying in Locations table
+
+2. Adding a New Bank (Command 2)
+
+   - Creating a new bank entry
+   - Verifying in RegisteredBank1 and RegisteredBank2 tables
+
+3. Adding a New Branch (Command 3)
+
+   - Creating a branch for existing bank
+   - Verifying in BankBranch1 and BankBranch2 tables
+
+4. Adding a New Person (Command 4)
+
+   - Creating customer profile with all details
+   - Verifying in Person1, Person2, and Person3 tables
+
+5. Creating Different Bank Accounts (Command 5)
+
+   - Demonstrating creation of:
+     - Current Account
+     - Savings Account
+     - Salary Account
+   - Verifying in respective account tables
+
+6. Setting Up a Budget (Command 6)
+
+   - Creating budget categories
+   - Verifying in Budgets1 and Budgets2 tables
+
+7. Creating Savings Goals (Command 7)
+   - Setting up savings targets
+   - Verifying in SavingsGoals1 and SavingsGoals2 tables
+
+#### Retrieval Operations
+
+8. Viewing User Transactions (Command 8)
+
+   - Displaying transaction history
+   - Showing different transaction types
+
+9. Viewing Branch Accounts (Command 9)
+
+   - Listing all accounts in a branch
+   - Showing account details and balances
+
+10. Viewing High Income Users (Command 10)
+
+    - Demonstrating income-based filtering
+    - Showing detailed user information
+
+11. Viewing Bank Branch Statistics (Command 11)
+
+    - Displaying branch distribution
+    - Showing bank-wise statistics
+
+12. Calculating Transaction Totals (Command 12)
+
+    - Demonstrating period-wise calculations
+    - Showing transaction summaries
+
+13. Finding Maximum Balance (Command 13)
+
+    - Identifying highest balance account
+    - Showing account holder details
+
+14. Viewing Country Statistics (Command 14)
+
+    - Showing country-wise expenditure
+    - Demonstrating statistical analysis
+
+15. Searching Users (Command 15)
+
+    - Demonstrating name-based search
+    - Showing partial match results
+
+16. Searching Banks/Branches (Command 16)
+    - Location-based search
+    - Name-based search
+
+#### Analysis Operations
+
+17. Expenditure Pattern Analysis (Command 17)
+
+    - Showing spending patterns
+    - Demonstrating geographical analysis
+
+18. Transaction Pattern Analysis (Command 18)
+    - Frequency analysis
+    - Amount-based patterns
+
+#### Modification Operations
+
+19. Budget Limit Updates (Command 19)
+
+    - Modifying existing budgets
+    - Showing validation checks
+
+20. Expired Goals Management (Command 20)
+    - Cleaning up expired goals
+    - Demonstrating data integrity
+
+Each operation is demonstrated with:
+
+1. Command execution in the CLI interface
+2. Database verification using SQL queries
+3. Display of before and after states
+4. Error handling demonstration where applicable
+
+The video maintains a clear flow, showing:
+
+- Input validation
+- Success messages
+- Error handling
+- Database consistency
+- Real-time updates
+
+Note: The demonstration uses pre-populated data to show realistic scenarios and interactions between different components of the system.
+
+### Technical Requirements
+
+- Python 3.7+
+- MySQL Server
+- Required Python packages:
+  - pymysql
+  - logging
+  - getpass
+
+### Setup Instructions
+
+1. Create the database using the provided SQL scripts
+2. Configure database connection parameters
+3. Install required Python packages
+4. Run the main.py script
 
 ### Security Features
-- Session timeout after 5 minutes of inactivity
-- Secure password hashing
-- Transaction password verification
-- Audit logging of all operations
 
-## 🚀 Getting Started
+- Session timeout management
+- Password protection
+- Transaction verification
+- Data validation
+- Error logging
 
-### Prerequisites
+### Error Handling
 
-1. **Python**: Ensure Python 3 is installed.
-2. **MySQL Server**: Ensure MySQL is installed and running.
-3. **Python Modules**: Install required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+The system includes comprehensive error handling for:
 
-### Running the Application
+- Database connection issues
+- Invalid input data
+- Constraint violations
+- Transaction failures
+- Security breaches
 
-1. Start the application:
-   ```bash
-   python main.py
-   ```
-2. Follow the on-screen instructions to navigate the system.
+### Logging
 
----
-
-## 📝 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-This is a course project for the CS4.301 - Data and Applications Course at IIIT Hyderabad. 
-
----
+All operations are logged in 'banking_system.log' with timestamps and error details.
