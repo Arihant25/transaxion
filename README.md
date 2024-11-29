@@ -1,4 +1,4 @@
-# Advanced Banking System
+# Transaxion
 
 ## Database Management System Project
 
@@ -119,8 +119,16 @@ This is a comprehensive banking system that manages customer accounts, transacti
     - Validates against user income
 
 20. **Remove Expired Goals** (Command 20)
+
     - Cleans up unmet savings goals
     - Maintains data integrity
+
+#### Transaction Operations
+
+21. **Make Transaction** (Command 21)
+    - Performs a transaction between two accounts
+    - Updates account balances
+    - Logs transaction details
 
 ### Video Demonstration
 
@@ -233,12 +241,18 @@ The video demonstration shows all major functionalities of the system in the fol
     - Cleaning up expired goals
     - Demonstrating data integrity
 
+#### Transaction Operations
+
+21. Making Transactions (Command 21)
+    - Performing account transactions
+    - Showing real-time updates
+
 Each operation is demonstrated with:
 
 1. Command execution in the CLI interface
-2. Database verification using SQL queries
+2. Database verification using SQL Workbench
 3. Display of before and after states
-4. Error handling demonstration where applicable
+4. Error handling demonstration for one case, all other cases are handled similarly
 
 The video maintains a clear flow, showing:
 
